@@ -5,8 +5,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import datamodels.GitHubUser;
 
@@ -15,6 +24,7 @@ public class TrackActivity extends AppCompatActivity {
     private TextView userNameText;
     private TextView followersText;
     private TextView followingText;
+    ImageView imageView;
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -31,6 +41,7 @@ public class TrackActivity extends AppCompatActivity {
         userNameText = findViewById(R.id.userNameText);
         followersText = findViewById(R.id.followersText);
         followingText = findViewById(R.id.followingText);
+        imageView = findViewById(R.id.imageView);
 
 
         user = (GitHubUser) getIntent().getSerializableExtra("user");
@@ -74,6 +85,9 @@ public class TrackActivity extends AppCompatActivity {
 
         mAdapter = new MyAdapter(user.getRepoHashmap());
         recyclerView.setAdapter(mAdapter);
+
+        Picasso.get().load("https://avatars.githubusercontent.com/u/665801?v=4").into(imageView);
+
 
     }
 
