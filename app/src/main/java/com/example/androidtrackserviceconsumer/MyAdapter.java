@@ -3,6 +3,8 @@ package com.example.androidtrackserviceconsumer;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -25,8 +27,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-        private List<Track> values;
-        private Context context;
+        private HashMap<String, String> values;
+
+        private List<String> keyList;
+        private List<String> valList;
+
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
@@ -35,7 +40,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             public TextView txtHeader;
             public TextView txtFooter;
             public View layout;
-            public ImageView trashImageView;
+
 
 
             public ViewHolder(View v) {
@@ -43,24 +48,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 layout = v;
                 txtHeader = (TextView) v.findViewById(R.id.firstLine);
                 txtFooter = (TextView) v.findViewById(R.id.secondLine);
-                trashImageView = (ImageView) v.findViewById(R.id.erase);
             }
         }
 
-        public void add(int position, Track item) {
-            values.add(position, item);
-            notifyItemInserted(position);
-        }
 
-        public void remove(int position) {
-            values.remove(position);
-            notifyItemRemoved(position);
-        }
+
 
         // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(Context context, List<Track> myDataset) {
+    public MyAdapter(HashMap<String, String> myDataset) {
             values = myDataset;
-            this.context = context;
+            keyList = new LinkedList<>(myDataset.keySet());
+            valList = new LinkedList<>(myDataset.values());
+
         }
 
         // Create new views (invoked by the layout manager)
@@ -82,42 +81,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            final Track track = values.get(position);
-            holder.txtHeader.setText(track.getTitle());
-            holder.txtHeader.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, TrackActivity.class);
-                    intent.putExtra("track", track);
-                    context.startActivity(intent);
-                    Log.d("DEBUG", "plusButtonClick");
-                }
-            });
-
-            holder.trashImageView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("DEBUG", "Delete + " + track.getId());
-
-                    Call<Void> call = MainActivity.trackService.deleteTrack(track.getId());
-                    call.enqueue(new Callback<Void>() {
-                        @RequiresApi(api = Build.VERSION_CODES.N)
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-
-                            Log.d("DEBUG", "onResponse");
-                        }
-
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-
-                            Log.d("DEBUG", t.getMessage());
-                        }
-                    });
-                }
-            });
-
-            holder.txtFooter.setText(track.getSinger());
+            final String key = keyList.get(position);
+            final String value = valList.get(position);
+            holder.txtHeader.setText(key);
+            holder.txtFooter.setText(value);
         }
 
         // Return the size of your dataset (invoked by the layout manager)

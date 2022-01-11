@@ -2,5 +2,12 @@
     <string name="app_name">AndroidTrackServiceConsumer</string>
     <string name="plusButtonText">+</string>
     <string name="track_name">Track Name</string>
-    <string name="author">Author</string>
+    <string name="author">GitHub User</string>
+    <string name="username">Username</string>
+    <string name="repositoris">Repositoris:</string>
+    <string name="followers">Followers:</string>
+    <string name="following">Following:</string>
+    <string name="language">language</string>
+    <string name="repo">Repo</string>
+    <string name="send">Send</string>
 </resources>
